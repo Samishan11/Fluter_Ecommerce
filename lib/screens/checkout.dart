@@ -49,59 +49,103 @@ class _CheckOutState extends State<CheckOut> {
     return Column(
         children: productProvider.userModelList.map((e) {
       return Container(
-        height: 50,
-        child: ESewaPaymentButton(
-              this._esewaPnp,
-                amount: 100.00,
-                callBackURL: "https://example.com",
-                productId: "abc123",
-                productName: "Flutter SDK Example",
-                onSuccess: (result) {
-                 print('Payment Success');
-                },
-                onFailure: (e) {
-                  print('Payment failed');
-                },
-              )
-        // child: MyButton(
-        //   name: "Buy",
-        //   onPressed: () {
-        //     // if (productProvider.getCheckOutModelList.isNotEmpty) {
-        //     //   FirebaseFirestore.instance.collection("Order").add({
-        //     //     "Product": productProvider.getCheckOutModelList
-        //     //         .map((c) => {
-        //     //               "ProductName": c.name,
-        //     //               "ProductPrice": c.price,
-        //     //               "ProductQuetity": c.quentity,
-        //     //               "ProductImage": c.image,
-        //     //               "Product Color": c.color,
-        //     //               "Product Size": c.size,
-        //     //             })
-        //     //         .toList(),
-        //     //     "TotalPrice": total.toStringAsFixed(2),
-        //     //     "UserName": e.userName,
-        //     //     "UserEmail": e.userEmail,
-        //     //     "UserNumber": e.userPhoneNumber,
-        //     //     "UserAddress": e.userAddress,
-        //     //     "UserId": user.uid,
-        //     //   });
-        //     //   setState(() {
-        //     //     myList.clear();
-        //     //   });
+          height: 50,
+          child: Row(
+            children: [
+              ElevatedButton(onPressed: () {
+                showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          ListTile(
+                            leading: new Icon(Icons.photo),
+                            title: new Text('Photo'),
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          ListTile(
+                            leading: new Icon(Icons.music_note),
+                            title: new Text('Music'),
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          ListTile(
+                            leading: new Icon(Icons.videocam),
+                            title: new Text('Video'),
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          ListTile(
+                            leading: new Icon(Icons.share),
+                            title: new Text('Share'),
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      );
+                    });
+              })
+            ],
+          )
+          // ESewaPaymentButton(
+          //       this._esewaPnp,
+          //         amount: 100.00,
+          //         callBackURL: "https://example.com",
+          //         productId: "abc123",
+          //         productName: "Flutter SDK Example",
+          //         onSuccess: (result) {
+          //          print('Payment Success');
+          //         },
+          //         onFailure: (e) {
+          //           print('Payment failed');
+          //         },
+          //       )
+          // child: MyButton(
+          //   name: "Buy",
+          //   onPressed: () {
+          //     // if (productProvider.getCheckOutModelList.isNotEmpty) {
+          //     //   FirebaseFirestore.instance.collection("Order").add({
+          //     //     "Product": productProvider.getCheckOutModelList
+          //     //         .map((c) => {
+          //     //               "ProductName": c.name,
+          //     //               "ProductPrice": c.price,
+          //     //               "ProductQuetity": c.quentity,
+          //     //               "ProductImage": c.image,
+          //     //               "Product Color": c.color,
+          //     //               "Product Size": c.size,
+          //     //             })
+          //     //         .toList(),
+          //     //     "TotalPrice": total.toStringAsFixed(2),
+          //     //     "UserName": e.userName,
+          //     //     "UserEmail": e.userEmail,
+          //     //     "UserNumber": e.userPhoneNumber,
+          //     //     "UserAddress": e.userAddress,
+          //     //     "UserId": user.uid,
+          //     //   });
+          //     //   setState(() {
+          //     //     myList.clear();
+          //     //   });
 
-        //     //   productProvider.addNotification("Notification");
-        //     // } else {
-        //     //   _scaffoldKey.currentState.showSnackBar(
-        //     //     SnackBar(
-        //     //       content: Text("No Item Yet"),
-        //     //     ),
-        //     //   );
-        //     // }
-        //   },
-        // ),
-      );
+          //     //   productProvider.addNotification("Notification");
+          //     // } else {
+          //     //   _scaffoldKey.currentState.showSnackBar(
+          //     //     SnackBar(
+          //     //       content: Text("No Item Yet"),
+          //     //     ),
+          //     //   );
+          //     // }
+          //   },
+          // ),
+          );
     }).toList());
   }
+
   ESewaPnp _esewaPnp;
   ESewaConfiguration _configuration;
   @override
@@ -109,7 +153,7 @@ class _CheckOutState extends State<CheckOut> {
     productProvider = Provider.of<ProductProvider>(context, listen: false);
     myList = productProvider.checkOutModelList;
     super.initState();
-     _configuration = ESewaConfiguration(
+    _configuration = ESewaConfiguration(
       clientID: "JB0BBQ4aD0UqIThFJwAKBgAXEUkEGQUBBAwdOgABHD4DChwUAB0R",
       secretKey: "BhwIWQQADhIYSxILExMcAgFXFhcOBwAKBgAXEQ==",
       environment: ESewaConfiguration.ENVIRONMENT_TEST,
