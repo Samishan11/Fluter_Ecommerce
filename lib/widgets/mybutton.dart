@@ -7,14 +7,14 @@ class MyButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 45,
-      width: double.infinity,
-      child: RaisedButton(
+      height: 35,
+      width: 160,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(primary: Color(0xff746bc9),),
         child: Text(
           name,
           style: TextStyle(color: Colors.white),
         ),
-        color: Color(0xff746bc9),
         onPressed: onPressed,
       ),
     );

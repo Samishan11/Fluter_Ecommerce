@@ -50,49 +50,109 @@ class _CheckOutState extends State<CheckOut> {
         children: productProvider.userModelList.map((e) {
       return Container(
           height: 50,
-          child: Row(
-            children: [
-              ElevatedButton(onPressed: () {
-                showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          ListTile(
-                            leading: new Icon(Icons.photo),
-                            title: new Text('Photo'),
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                          ),
-                          ListTile(
-                            leading: new Icon(Icons.music_note),
-                            title: new Text('Music'),
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                          ),
-                          ListTile(
-                            leading: new Icon(Icons.videocam),
-                            title: new Text('Video'),
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                          ),
-                          ListTile(
-                            leading: new Icon(Icons.share),
-                            title: new Text('Share'),
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ],
-                      );
-                    });
-              })
-            ],
+          child: ElevatedButton(
+            onPressed: () {
+              showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        MyButton(
+                          name: "Buy",
+                          onPressed: () {
+                            if (productProvider
+                                .getCheckOutModelList.isNotEmpty) {
+                              FirebaseFirestore.instance
+                                  .collection("Order")
+                                  .add({
+                                "Product": productProvider.getCheckOutModelList
+                                    .map((c) => {
+                                          "ProductName": c.name,
+                                          "ProductPrice": c.price,
+                                          "ProductQuetity": c.quentity,
+                                          "ProductImage": c.image,
+                                          "Product Color": c.color,
+                                          "Product Size": c.size,
+                                        })
+                                    .toList(),
+                                "TotalPrice": total.toStringAsFixed(2),
+                                "UserName": e.userName,
+                                "UserEmail": e.userEmail,
+                                "UserNumber": e.userPhoneNumber,
+                                "UserAddress": e.userAddress,
+                                "UserId": user.uid,
+                              });
+                              setState(() {
+                                myList.clear();
+                              });
+
+                              productProvider.addNotification("Notification");
+                            } else {
+                              _scaffoldKey.currentState.showSnackBar(
+                                SnackBar(
+                                  content: Text("No Item Yet"),
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                        ESewaPaymentButton(
+                          this._esewaPnp,
+                          color:Color(0xff746bc9),
+                          amount: 100.00,
+                          callBackURL: "https://example.com",
+                          productId: "abc123",
+                          productName: "Flutter SDK Example",
+                          onSuccess: (result) {
+                           if (productProvider
+                                .getCheckOutModelList.isNotEmpty) {
+                              FirebaseFirestore.instance
+                                  .collection("Order")
+                                  .add({
+                                "Product": productProvider.getCheckOutModelList
+                                    .map((c) => {
+                                          "ProductName": c.name,
+                                          "ProductPrice": c.price,
+                                          "ProductQuetity": c.quentity,
+                                          "ProductImage": c.image,
+                                          "Product Color": c.color,
+                                          "Product Size": c.size,
+                                        })
+                                    .toList(),
+                                "TotalPrice": total.toStringAsFixed(2),
+                                "UserName": e.userName,
+                                "UserEmail": e.userEmail,
+                                "UserNumber": e.userPhoneNumber,
+                                "UserAddress": e.userAddress,
+                                "UserId": user.uid,
+                              });
+                              setState(() {
+                                myList.clear();
+                              });
+
+                              productProvider.addNotification("Notification");
+                            } else {
+                              _scaffoldKey.currentState.showSnackBar(
+                                SnackBar(
+                                  content: Text("No Item Yet"),
+                                ),
+                              );
+                            }
+                          },
+                          onFailure: (e) {
+                            print('Payment failed');
+                          },
+                        )
+                      ],
+                    );
+                  });
+            },
+            child: Text('Payment'),
           )
+
           // ESewaPaymentButton(
           //       this._esewaPnp,
           //         amount: 100.00,
